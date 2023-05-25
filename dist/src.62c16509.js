@@ -38137,7 +38137,302 @@ function Pokemon() {
   return react_1.default.createElement("div", null, react_1.default.createElement("p", null, "id: ", id), react_1.default.createElement("p", null, "name: ", pokemon === null || pokemon === void 0 ? void 0 : pokemon.name), react_1.default.createElement("p", null, "weight: ", pokemon === null || pokemon === void 0 ? void 0 : pokemon.weight), react_1.default.createElement("p", null, "height: ", pokemon === null || pokemon === void 0 ? void 0 : pokemon.height));
 }
 exports.default = Pokemon;
-},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/dist/index.js","../hooks/usePokemon":"../src/hooks/usePokemon.tsx"}],"../src/index.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/dist/index.js","../hooks/usePokemon":"../src/hooks/usePokemon.tsx"}],"../src/game/contexts/SquaresContext.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SquareContext = void 0;
+var react_1 = require("react");
+var init = {
+  squares: Array.from(new Array(3), function () {
+    return new Array(3).fill('');
+  }),
+  setSquares: function setSquares(arg) {}
+};
+exports.SquareContext = (0, react_1.createContext)(init);
+},{"react":"../node_modules/react/index.js"}],"../src/game/contexts/TurnContext.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TurnContext = void 0;
+var react_1 = require("react");
+var init = {
+  turn: true,
+  setTurn: function setTurn(arg) {}
+};
+exports.TurnContext = (0, react_1.createContext)(init);
+},{"react":"../node_modules/react/index.js"}],"../src/game/contexts/VictoryColorContext.tsx":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.VictoryColorContext = void 0;
+var react_1 = require("react");
+var init = {
+  victoryColor: '',
+  setVictoryColor: function setVictoryColor(arg) {}
+};
+exports.VictoryColorContext = (0, react_1.createContext)(init);
+},{"react":"../node_modules/react/index.js"}],"../src/game/Square.tsx":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  __setModuleDefault(result, mod);
+  return result;
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var react_1 = __importStar(require("react"));
+var SquaresContext_1 = require("./contexts/SquaresContext");
+var TurnContext_1 = require("./contexts/TurnContext");
+var VictoryColorContext_1 = require("./contexts/VictoryColorContext");
+function Square(props) {
+  var i = props.index_h;
+  var j = props.index_w;
+  var _ref = (0, react_1.useContext)(SquaresContext_1.SquareContext),
+    squares = _ref.squares,
+    setSquares = _ref.setSquares;
+  var _ref2 = (0, react_1.useContext)(TurnContext_1.TurnContext),
+    turn = _ref2.turn,
+    setTurn = _ref2.setTurn;
+  var _ref3 = (0, react_1.useContext)(VictoryColorContext_1.VictoryColorContext),
+    victoryColor = _ref3.victoryColor,
+    setVictoryColor = _ref3.setVictoryColor;
+  var handleClick = function handleClick(event) {
+    if (squares[i][j] !== "無" || victoryColor !== "") return;
+    var nextSquares = structuredClone(squares);
+    if (turn) {
+      nextSquares[i][j] = "赤";
+    } else {
+      nextSquares[i][j] = "青";
+    }
+    setSquares(nextSquares);
+    setTurn(!turn);
+  };
+  return react_1.default.createElement("button", {
+    className: "square",
+    onClick: handleClick
+  }, squares[i][j]);
+}
+exports.default = Square;
+},{"react":"../node_modules/react/index.js","./contexts/SquaresContext":"../src/game/contexts/SquaresContext.tsx","./contexts/TurnContext":"../src/game/contexts/TurnContext.tsx","./contexts/VictoryColorContext":"../src/game/contexts/VictoryColorContext.tsx"}],"../src/game/Board.tsx":[function(require,module,exports) {
+"use strict";
+
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var react_1 = __importDefault(require("react"));
+var Square_1 = __importDefault(require("./Square"));
+function Board(props) {
+  /*
+    記述する。
+    主に Square の状態を管理する。
+  */
+  var list = [];
+  for (var i = 0; i < 3; i++) {
+    list.push(react_1.default.createElement("div", {
+      className: "board-row"
+    }));
+    for (var j = 0; j < 3; j++) {
+      list.push(react_1.default.createElement(Square_1.default, {
+        index_w: i,
+        index_h: j
+      }));
+    }
+  }
+  return react_1.default.createElement(react_1.default.Fragment, null, list);
+}
+exports.default = Board;
+},{"react":"../node_modules/react/index.js","./Square":"../src/game/Square.tsx"}],"../src/game/Game.tsx":[function(require,module,exports) {
+"use strict";
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  __setModuleDefault(result, mod);
+  return result;
+};
+var __importDefault = this && this.__importDefault || function (mod) {
+  return mod && mod.__esModule ? mod : {
+    "default": mod
+  };
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var react_1 = __importStar(require("react"));
+var Board_1 = __importDefault(require("./Board"));
+var SquaresContext_1 = require("./contexts/SquaresContext");
+var TurnContext_1 = require("./contexts/TurnContext");
+var VictoryColorContext_1 = require("./contexts/VictoryColorContext");
+function Game(props) {
+  /*
+    記述する。
+    ゲーム全般の状態管理とロジックを集中させる。
+  */
+  var _ref = (0, react_1.useState)(Array.from(new Array(3), function () {
+      return new Array(3).fill("無");
+    })),
+    _ref2 = _slicedToArray(_ref, 2),
+    squares = _ref2[0],
+    setSquares = _ref2[1];
+  var _ref3 = (0, react_1.useState)(true),
+    _ref4 = _slicedToArray(_ref3, 2),
+    turn = _ref4[0],
+    setTurn = _ref4[1];
+  var _ref5 = (0, react_1.useState)(""),
+    _ref6 = _slicedToArray(_ref5, 2),
+    victoryColor = _ref6[0],
+    setVictoryColor = _ref6[1];
+  var status = turn ? "赤" : "青";
+  var judgeVictory = function judgeVictory() {
+    var color = turn ? "青" : "赤";
+    //よこ
+    for (var i = 0; i < 3; i++) {
+      var _victory = true;
+      for (var j = 0; j < 3; j++) {
+        if (squares[i][j] !== color) {
+          _victory = false;
+        }
+      }
+      if (_victory) return color;
+    }
+    //たて
+    for (var _i2 = 0; _i2 < 3; _i2++) {
+      var _victory2 = true;
+      for (var _j = 0; _j < 3; _j++) {
+        if (squares[_j][_i2] !== color) {
+          _victory2 = false;
+        }
+      }
+      if (_victory2) return color;
+    }
+    //斜め
+    var victory = true;
+    for (var _i3 = 0; _i3 < 3; _i3++) {
+      if (squares[_i3][_i3] !== color) {
+        victory = false;
+      }
+    }
+    if (victory) return color;
+    victory = true;
+    for (var _i4 = 0; _i4 < 3; _i4++) {
+      if (squares[2 - _i4][_i4] !== color) {
+        victory = false;
+      }
+    }
+    if (victory) return color;
+    return "";
+  };
+  (0, react_1.useEffect)(function () {
+    var judgeResult = judgeVictory();
+    if (judgeResult !== "") {
+      setVictoryColor(judgeResult);
+    }
+  }, [squares]);
+  var handleNewGame = function handleNewGame(event) {
+    setSquares(Array.from(new Array(3), function () {
+      return new Array(3).fill("無");
+    }));
+    setTurn(true);
+    setVictoryColor("");
+  };
+  return react_1.default.createElement(VictoryColorContext_1.VictoryColorContext.Provider, {
+    value: {
+      victoryColor: victoryColor,
+      setVictoryColor: setVictoryColor
+    }
+  }, react_1.default.createElement(TurnContext_1.TurnContext.Provider, {
+    value: {
+      turn: turn,
+      setTurn: setTurn
+    }
+  }, react_1.default.createElement(SquaresContext_1.SquareContext.Provider, {
+    value: {
+      squares: squares,
+      setSquares: setSquares
+    }
+  }, react_1.default.createElement("div", {
+    className: "game"
+  }, react_1.default.createElement("div", {
+    className: "game-board"
+  }, react_1.default.createElement(Board_1.default, null)), react_1.default.createElement("div", {
+    className: "game-info"
+  }, react_1.default.createElement("button", {
+    onClick: handleNewGame
+  }, "New Game"), react_1.default.createElement("div", null, "(status)"), !victoryColor && react_1.default.createElement("div", null, status, "\u306E\u30BF\u30FC\u30F3"), victoryColor && react_1.default.createElement("div", null, victoryColor, "\u306E\u52DD\u3061"), react_1.default.createElement("ol", null))))));
+}
+exports.default = Game;
+},{"react":"../node_modules/react/index.js","./Board":"../src/game/Board.tsx","./contexts/SquaresContext":"../src/game/contexts/SquaresContext.tsx","./contexts/TurnContext":"../src/game/contexts/TurnContext.tsx","./contexts/VictoryColorContext":"../src/game/contexts/VictoryColorContext.tsx"}],"../src/index.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -38157,6 +38452,7 @@ var Counter_1 = __importDefault(require("./pages/Counter"));
 var Detail_1 = __importDefault(require("./pages/Detail"));
 var UserProvider_1 = __importDefault(require("./provider/UserProvider"));
 var Pokemon_1 = __importDefault(require("./components/Pokemon"));
+var Game_1 = __importDefault(require("./game/Game"));
 var router = (0, react_router_dom_1.createBrowserRouter)([{
   path: "/",
   element: react_1.default.createElement(Top_1.default, null)
@@ -38169,13 +38465,16 @@ var router = (0, react_router_dom_1.createBrowserRouter)([{
 }, {
   path: "pokemons/:id",
   element: react_1.default.createElement(Pokemon_1.default, null)
+}, {
+  path: "game",
+  element: react_1.default.createElement(Game_1.default, null)
 }]);
 var container = document.getElementById("root");
 var root = (0, client_1.createRoot)(container);
 root.render(react_1.default.createElement(UserProvider_1.default, null, react_1.default.createElement(react_router_dom_1.RouterProvider, {
   router: router
 })));
-},{"react":"../node_modules/react/index.js","react-dom/client":"../node_modules/react-dom/client.js","./pages/Top":"../src/pages/Top.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js","./pages/Counter":"../src/pages/Counter.tsx","./pages/Detail":"../src/pages/Detail.tsx","./provider/UserProvider":"../src/provider/UserProvider.tsx","./components/Pokemon":"../src/components/Pokemon.tsx"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom/client":"../node_modules/react-dom/client.js","./pages/Top":"../src/pages/Top.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js","./pages/Counter":"../src/pages/Counter.tsx","./pages/Detail":"../src/pages/Detail.tsx","./provider/UserProvider":"../src/provider/UserProvider.tsx","./components/Pokemon":"../src/components/Pokemon.tsx","./game/Game":"../src/game/Game.tsx"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -38200,7 +38499,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56291" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56401" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

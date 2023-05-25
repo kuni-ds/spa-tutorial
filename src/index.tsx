@@ -8,6 +8,7 @@ import Counter from "./pages/Counter";
 import Detail from "./pages/Detail";
 import UserProvider from "./provider/UserProvider";
 import Pokemon from "./components/Pokemon";
+import Game from "./game/Game";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: "pokemons/:id",
     element: <Pokemon />,
+  },
+  {
+    path: "game",
+    element: <Game />,
   },
 ]);
 
