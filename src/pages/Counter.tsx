@@ -1,4 +1,3 @@
-// src/pages/Counter
 import React from "react";
 import CounterComponent from "../components/Counter";
 
