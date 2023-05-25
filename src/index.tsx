@@ -7,6 +7,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Counter from "./pages/Counter";
 import Detail from "./pages/Detail";
 import UserProvider from "./provider/UserProvider";
+import Pokemon from "./components/Pokemon";
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: "pages/:id",
     element: <Detail />,
+  },
+  {
+    path: "pokemons/:id",
+    element: <Pokemon />,
   },
 ]);
 
