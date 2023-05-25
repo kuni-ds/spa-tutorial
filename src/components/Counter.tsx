@@ -1,15 +1,13 @@
-// src/pages/Counter
-import React, { useState } from "react";
+import React, { useContext } from "react";
+import { CounterContext } from "../contexts/CounterContext";
 
 export default function Counter() {
-  const [count, setCount] = useState(0);
+  const { count, increment } = useContext(CounterContext);
 
-  const handleOnClick = () => setCount(count + 1);
-  
   return (
     <div>
       <p>You Clicked {count} times</p>
-      <button onClick={handleOnClick}>Click me</button>
+      <button onClick={increment}>Click me</button>
     </div>
   );
 }

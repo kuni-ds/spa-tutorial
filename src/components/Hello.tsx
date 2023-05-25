@@ -1,8 +1,16 @@
 // src/Hello.tsx
 import React from "react";
+import { useUser } from "../provider/UserProvider";
 
-export default function Hello(props: { name: string }) {
-  return <div>Hello, {props.name}.</div>;
+export default function Hello() {
+  const { name } = useUser();
+
+  return (
+    <div>
+      Hello, {name}
+      {name && "."}
+    </div>
+  );
 }
 
 // 補足: 以下と同等

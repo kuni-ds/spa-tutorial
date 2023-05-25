@@ -28889,7 +28889,76 @@ if ("development" === 'production') {
     }
   };
 }
-},{"react-dom":"../node_modules/react-dom/index.js"}],"../src/components/Hello.tsx":[function(require,module,exports) {
+},{"react-dom":"../node_modules/react-dom/index.js"}],"../src/provider/UserProvider.tsx":[function(require,module,exports) {
+"use strict";
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i.return && (_r = _i.return(), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  __setModuleDefault(result, mod);
+  return result;
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.useUser = void 0;
+var react_1 = __importStar(require("react"));
+var react_2 = require("react");
+var init = {
+  name: undefined,
+  changeName: function changeName(_v) {}
+};
+var UserContext = (0, react_2.createContext)(init);
+var useUser = function useUser() {
+  return (0, react_1.useContext)(UserContext);
+};
+exports.useUser = useUser;
+function UserProvider(_ref) {
+  var children = _ref.children;
+  var _ref2 = (0, react_1.useState)(undefined),
+    _ref3 = _slicedToArray(_ref2, 2),
+    name = _ref3[0],
+    setName = _ref3[1];
+  return react_1.default.createElement(UserContext.Provider, {
+    value: {
+      name: name,
+      changeName: setName
+    }
+  }, children);
+}
+exports.default = UserProvider;
+},{"react":"../node_modules/react/index.js"}],"../src/components/Hello.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -28902,8 +28971,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 // src/Hello.tsx
 var react_1 = __importDefault(require("react"));
-function Hello(props) {
-  return react_1.default.createElement("div", null, "Hello, ", props.name, ".");
+var UserProvider_1 = require("../provider/UserProvider");
+function Hello() {
+  var _ref = (0, UserProvider_1.useUser)(),
+    name = _ref.name;
+  return react_1.default.createElement("div", null, "Hello, ", name, name && ".");
 }
 exports.default = Hello;
 // 補足: 以下と同等
@@ -28911,7 +28983,7 @@ exports.default = Hello;
 // 関数定義時に次のように書くと、
 // > Hello({ name }: { name: string })
 // 関数内でprops.name ではなく、nameで参照できて便利です。
-},{"react":"../node_modules/react/index.js"}],"../node_modules/@remix-run/router/dist/router.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../provider/UserProvider":"../src/provider/UserProvider.tsx"}],"../node_modules/@remix-run/router/dist/router.js":[function(require,module,exports) {
 var define;
 "use strict";
 
@@ -36366,10 +36438,17 @@ Object.defineProperty(exports, "__esModule", {
 var react_1 = __importDefault(require("react"));
 var Hello_1 = __importDefault(require("../components/Hello"));
 var react_router_dom_1 = require("react-router-dom");
+var UserProvider_1 = require("../provider/UserProvider");
 function Top() {
-  return react_1.default.createElement(react_1.default.Fragment, null, react_1.default.createElement(Hello_1.default, {
-    name: "world"
-  }), react_1.default.createElement(react_router_dom_1.Link, {
+  var _ref = (0, UserProvider_1.useUser)(),
+    name = _ref.name,
+    changeName = _ref.changeName;
+  return react_1.default.createElement(react_1.default.Fragment, null, react_1.default.createElement(Hello_1.default, null), react_1.default.createElement("input", {
+    value: name || "",
+    onChange: function onChange(e) {
+      return changeName(e.target.value);
+    }
+  }), react_1.default.createElement("br", null), react_1.default.createElement(react_router_dom_1.Link, {
     to: "/counter"
   }, "\u30AB\u30A6\u30F3\u30BF\u30FC\u30DA\u30FC\u30B8\u3078"));
   // 補足: 以下と同等
@@ -36382,7 +36461,68 @@ function Top() {
 }
 
 exports.default = Top;
-},{"react":"../node_modules/react/index.js","../components/Hello":"../src/components/Hello.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js"}],"../src/components/Counter.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../components/Hello":"../src/components/Hello.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js","../provider/UserProvider":"../src/provider/UserProvider.tsx"}],"../src/contexts/CounterContext.ts":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CounterContext = void 0;
+var react_1 = require("react");
+var init = {
+  count: 0,
+  increment: function increment() {}
+};
+exports.CounterContext = (0, react_1.createContext)(init);
+},{"react":"../node_modules/react/index.js"}],"../src/components/Counter.tsx":[function(require,module,exports) {
+"use strict";
+
+var __createBinding = this && this.__createBinding || (Object.create ? function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  var desc = Object.getOwnPropertyDescriptor(m, k);
+  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+    desc = {
+      enumerable: true,
+      get: function get() {
+        return m[k];
+      }
+    };
+  }
+  Object.defineProperty(o, k2, desc);
+} : function (o, m, k, k2) {
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
+});
+var __setModuleDefault = this && this.__setModuleDefault || (Object.create ? function (o, v) {
+  Object.defineProperty(o, "default", {
+    enumerable: true,
+    value: v
+  });
+} : function (o, v) {
+  o["default"] = v;
+});
+var __importStar = this && this.__importStar || function (mod) {
+  if (mod && mod.__esModule) return mod;
+  var result = {};
+  if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+  __setModuleDefault(result, mod);
+  return result;
+};
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var react_1 = __importStar(require("react"));
+var CounterContext_1 = require("../contexts/CounterContext");
+function Counter() {
+  var _ref = (0, react_1.useContext)(CounterContext_1.CounterContext),
+    count = _ref.count,
+    increment = _ref.increment;
+  return react_1.default.createElement("div", null, react_1.default.createElement("p", null, "You Clicked ", count, " times"), react_1.default.createElement("button", {
+    onClick: increment
+  }, "Click me"));
+}
+exports.default = Counter;
+},{"react":"../node_modules/react/index.js","../contexts/CounterContext":"../src/contexts/CounterContext.ts"}],"../src/pages/Counter.tsx":[function(require,module,exports) {
 "use strict";
 
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
@@ -36422,27 +36562,6 @@ var __importStar = this && this.__importStar || function (mod) {
   __setModuleDefault(result, mod);
   return result;
 };
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-// src/pages/Counter
-var react_1 = __importStar(require("react"));
-function Counter() {
-  var _ref = (0, react_1.useState)(0),
-    _ref2 = _slicedToArray(_ref, 2),
-    count = _ref2[0],
-    setCount = _ref2[1];
-  var handleOnClick = function handleOnClick() {
-    return setCount(count + 1);
-  };
-  return react_1.default.createElement("div", null, react_1.default.createElement("p", null, "You Clicked ", count, " times"), react_1.default.createElement("button", {
-    onClick: handleOnClick
-  }, "Click me"));
-}
-exports.default = Counter;
-},{"react":"../node_modules/react/index.js"}],"../src/pages/Counter.tsx":[function(require,module,exports) {
-"use strict";
-
 var __importDefault = this && this.__importDefault || function (mod) {
   return mod && mod.__esModule ? mod : {
     "default": mod
@@ -36451,13 +36570,27 @@ var __importDefault = this && this.__importDefault || function (mod) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var react_1 = __importDefault(require("react"));
+var react_1 = __importStar(require("react"));
 var Counter_1 = __importDefault(require("../components/Counter"));
+var CounterContext_1 = require("../contexts/CounterContext");
+var Hello_1 = __importDefault(require("../components/Hello"));
 function Counter() {
-  return react_1.default.createElement("div", null, react_1.default.createElement("h1", null, "\u30AB\u30A6\u30F3\u30BF\u30FC"), react_1.default.createElement(Counter_1.default, null), react_1.default.createElement(Counter_1.default, null), react_1.default.createElement(Counter_1.default, null));
+  var _ref = (0, react_1.useState)(0),
+    _ref2 = _slicedToArray(_ref, 2),
+    count = _ref2[0],
+    setCount = _ref2[1];
+  var increment = function increment() {
+    return setCount(count + 1);
+  };
+  return react_1.default.createElement("div", null, react_1.default.createElement("h1", null, "\u30AB\u30A6\u30F3\u30BF\u30FC"), react_1.default.createElement(Hello_1.default, null), react_1.default.createElement(CounterContext_1.CounterContext.Provider, {
+    value: {
+      count: count,
+      increment: increment
+    }
+  }, react_1.default.createElement(Counter_1.default, null), react_1.default.createElement(Counter_1.default, null)));
 }
 exports.default = Counter;
-},{"react":"../node_modules/react/index.js","../components/Counter":"../src/components/Counter.tsx"}],"../src/pages/Detail.tsx":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","../components/Counter":"../src/components/Counter.tsx","../contexts/CounterContext":"../src/contexts/CounterContext.ts","../components/Hello":"../src/components/Hello.tsx"}],"../src/pages/Detail.tsx":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
@@ -36494,6 +36627,7 @@ var Top_1 = __importDefault(require("./pages/Top"));
 var react_router_dom_1 = require("react-router-dom");
 var Counter_1 = __importDefault(require("./pages/Counter"));
 var Detail_1 = __importDefault(require("./pages/Detail"));
+var UserProvider_1 = __importDefault(require("./provider/UserProvider"));
 var router = (0, react_router_dom_1.createBrowserRouter)([{
   path: "/",
   element: react_1.default.createElement(Top_1.default, null)
@@ -36506,10 +36640,10 @@ var router = (0, react_router_dom_1.createBrowserRouter)([{
 }]);
 var container = document.getElementById("root");
 var root = (0, client_1.createRoot)(container);
-root.render(react_1.default.createElement(react_router_dom_1.RouterProvider, {
+root.render(react_1.default.createElement(UserProvider_1.default, null, react_1.default.createElement(react_router_dom_1.RouterProvider, {
   router: router
-}));
-},{"react":"../node_modules/react/index.js","react-dom/client":"../node_modules/react-dom/client.js","./pages/Top":"../src/pages/Top.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js","./pages/Counter":"../src/pages/Counter.tsx","./pages/Detail":"../src/pages/Detail.tsx"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})));
+},{"react":"../node_modules/react/index.js","react-dom/client":"../node_modules/react-dom/client.js","./pages/Top":"../src/pages/Top.tsx","react-router-dom":"../node_modules/react-router-dom/dist/index.js","./pages/Counter":"../src/pages/Counter.tsx","./pages/Detail":"../src/pages/Detail.tsx","./provider/UserProvider":"../src/provider/UserProvider.tsx"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
