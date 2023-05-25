@@ -12,6 +12,8 @@ export default function Top() {
       <input value={name || ""} onChange={(e) => changeName(e.target.value)} />
       <br/>
       <Link to="/counter">カウンターページへ</Link>
+      <br/>
+      <Link to="/game">三目並べ</Link>
     </>
   );
 

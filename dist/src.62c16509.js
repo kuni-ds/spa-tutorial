@@ -36450,7 +36450,9 @@ function Top() {
     }
   }), react_1.default.createElement("br", null), react_1.default.createElement(react_router_dom_1.Link, {
     to: "/counter"
-  }, "\u30AB\u30A6\u30F3\u30BF\u30FC\u30DA\u30FC\u30B8\u3078"));
+  }, "\u30AB\u30A6\u30F3\u30BF\u30FC\u30DA\u30FC\u30B8\u3078"), react_1.default.createElement("br", null), react_1.default.createElement(react_router_dom_1.Link, {
+    to: "/game"
+  }, "\u4E09\u76EE\u4E26\u3079"));
   // 補足: 以下と同等
   // return Hello({ name: "world" });
   // 補足: 以下と同等
@@ -38499,7 +38501,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56401" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59120" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
