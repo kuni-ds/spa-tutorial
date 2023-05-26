@@ -7,7 +7,7 @@ import { SquareContext } from "./contexts/SquaresContext";
 import { TurnContext } from "./contexts/TurnContext";
 import { VictoryColorContext } from "./contexts/VictoryColorContext";
 
-import judgeVictory from "./functions/JudgeVictory";
+import judgeVictory from "./functions/judgeVictory";
 
 export default function Game(props) {
   /*
